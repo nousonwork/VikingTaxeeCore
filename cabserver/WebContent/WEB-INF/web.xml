@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>cabserver</display-name>
+ 
+<listener>
+	<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
+</listener>
+ 
+
+ <servlet>
+    <description></description>
+    <display-name>StartupServlet</display-name>
+    <servlet-name>StartupServlet</servlet-name>
+    <servlet-class>com.cabserver.handler.StartupServlet</servlet-class>
+    <init-param>
+			<param-name>log4j-properties-location</param-name>
+			<param-value>WEB-INF/log4j.properties</param-value>
+		</init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  <servlet>
+		<servlet-name>Log4JInitServlet</servlet-name>
+		<servlet-class>com.cabserver.handler.Log4JInitServlet</servlet-class>
+		<init-param>
+			<param-name>log4j-properties-location</param-name>
+			<param-value>WEB-INF/log4j.properties</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+<servlet>
+	<servlet-name>Resteasy</servlet-name>
+	<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>	
+</servlet>
+<servlet-mapping>
+	<servlet-name>Resteasy</servlet-name>
+	<url-pattern>/*</url-pattern>
+</servlet-mapping>
+
+<context-param>
+	<param-name>resteasy.scan</param-name>
+	<param-value>true</param-value>
+</context-param>
+</web-app>
