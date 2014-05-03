@@ -6,11 +6,13 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.annotation.WebFilter;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -34,10 +36,14 @@ public class Customer {
 	@POST
 	@Path("login")
 	@Produces(MediaType.TEXT_HTML)
+	
 	public Response login(String jsonData) {
 		// String data = "";
+		ResponseBuilder rb = Response.ok();
 		HashMap<String, String> responseMap = new HashMap<String, String>();
 		try {
+			
+			rb.header("Access-Control-Allow-Credentials", "true");
 
 			// log.info("Inside Customer >> login before decoding = " +
 			// jsonData);
@@ -81,6 +87,7 @@ public class Customer {
 						responseMap.put("authLevel", um.getAuthLevel() + "");
 						responseMap.put("name", um.getFirstName());
 						responseMap.put("userId", um.getUserId());
+						responseMap.put("phone", phone);
 					} else if (um != null && um.getAuthLevel() == 2) {
 
 						// log.info("Admin Login Successfull. HTTP code is 200.");
@@ -90,6 +97,7 @@ public class Customer {
 						responseMap.put("authLevel", um.getAuthLevel() + "");
 						responseMap.put("name", um.getFirstName());
 						responseMap.put("userId", um.getUserId());
+						responseMap.put("phone", phone);
 					} else {
 						log.info("Login Error. HTTP code is "
 								+ Constants.BOOKING_FAILED_CODE + ".");
@@ -114,11 +122,17 @@ public class Customer {
 
 			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
 			responseMap.put("msg", "Server Error.");
-			return Response.status(200).entity(jsonCreater(responseMap))
-					.build();
+			rb.status(200);
+			rb.entity(jsonCreater(responseMap));
+			return rb.build();
+			/*return Response.status(200).entity(jsonCreater(responseMap))
+					.build();*/
 		} else {
-			return Response.status(200).entity(jsonCreater(responseMap))
-					.build();
+			rb.status(200);
+			rb.entity(jsonCreater(responseMap));
+			return rb.build();
+			/*return Response.status(200).entity(jsonCreater(responseMap))
+					.build();*/
 		}
 
 	}
