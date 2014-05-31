@@ -13,7 +13,7 @@ import com.cabserver.db.DatabaseManager;
 import com.cabserver.pojo.DriverMaster;
 import com.cabserver.pojo.TravelMaster;
 import com.cabserver.pojo.UserMaster;
-import com.cabserver.util.Constants;
+import com.cabserver.util.ConfigDetails;
 import com.cabserver.util.MyUtil;
 
 @DisallowConcurrentExecution

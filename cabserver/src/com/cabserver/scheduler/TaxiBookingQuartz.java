@@ -16,7 +16,7 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import com.cabserver.pojo.TravelMaster;
 import com.cabserver.util.CacheBuilder;
-import com.cabserver.util.Constants;
+import com.cabserver.util.ConfigDetails;
 import com.cabserver.util.MyUtil;
 
 public class TaxiBookingQuartz {
@@ -163,7 +163,7 @@ public class TaxiBookingQuartz {
 
 			Calendar bookingTime = Calendar.getInstance();
 			bookingTime.setTimeInMillis((tm.getDateTime().getTime())
-					+ Constants.TIME_DIFF);
+					+ Long.parseLong(ConfigDetails.constants.get("TIME_DIFF")));
 			log.info("scheduleTaxiBookingJob >> Server adjusted bookingTime = "
 					+ new Date(bookingTime.getTimeInMillis()));
 			log.info("scheduleTaxiBookingJob >> booking category(Scheduled =2,Manual=1) Type = "
@@ -185,7 +185,7 @@ public class TaxiBookingQuartz {
 				log.info("updateBookingStatus exception =" + e.getMessage());
 			}
 
-			if (tm.getBookingType() == Constants.SCHEDULED_BOOKING_TYPE) {
+			if (tm.getBookingType() == Integer.parseInt(ConfigDetails.constants.get("SCHEDULED_BOOKING_TYPE"))) {
 
 				bookingType = validateTime(bookingTime.getTimeInMillis());
 				log.info("scheduleTaxiBookingJob >> booking Time Delay Type = "
@@ -218,7 +218,7 @@ public class TaxiBookingQuartz {
 				} else if (bookingType == 3) {
 					Calendar deleyedBookingTime = Calendar.getInstance();
 					deleyedBookingTime
-							.setTimeInMillis(((bookingTime.getTimeInMillis()) - (1000 * 60 * (Constants.BOOKING_ACTIVATION_TIME))));
+							.setTimeInMillis(((bookingTime.getTimeInMillis()) - (1000 * 60 * (Long.parseLong(ConfigDetails.constants.get("BOOKING_ACTIVATION_TIME"))))));
 					triggerBooking(deleyedBookingTime.getTime(), job,
 							bookingType, "DelayedBooking",
 							"DelayedBookingGroup", tm);
@@ -234,7 +234,7 @@ public class TaxiBookingQuartz {
 					bookingType = 0;
 					log.info("scheduleTaxiBookingJob >> Taxi Booking time Invalid.");
 				}
-			} else if (tm.getBookingType() == Constants.MANUAL_BOOKING_TYPE) {
+			} else if (tm.getBookingType() == Integer.parseInt(ConfigDetails.constants.get("MANUAL_BOOKING_TYPE"))) {
 
 				bookingType = validateServerAdjustedAdminTime(bookingTime.getTimeInMillis());
 
@@ -256,7 +256,7 @@ public class TaxiBookingQuartz {
 
 					Calendar deleyedBookingTime = Calendar.getInstance();
 					deleyedBookingTime
-							.setTimeInMillis(((bookingTime.getTimeInMillis()) - (1000 * 60 * (Constants.MANUAL_BOOKING_ACTIVATION_TIME))));
+							.setTimeInMillis(((bookingTime.getTimeInMillis()) - (1000 * 60 * (Long.parseLong(ConfigDetails.constants.get("MANUAL_BOOKING_ACTIVATION_TIME"))))));
 
 					triggerBooking(deleyedBookingTime.getTime(),
 							manualBookingActivationJob, bookingType,
@@ -351,8 +351,8 @@ public class TaxiBookingQuartz {
 
 			scheduleType = -1;
 
-		} else if ((timeDiff <= (1000 * 60 * (Constants.MAX_BOOKING_TIME)))
-				&& (timeDiff >= (1000 * 60 * (Constants.MIN_BOOKING_TIME)))) {
+		} else if ((timeDiff <= (1000 * 60 * (Long.parseLong(ConfigDetails.constants.get("MAX_BOOKING_TIME")))))
+				&& (timeDiff >= (1000 * 60 * (Long.parseLong(ConfigDetails.constants.get("MIN_BOOKING_TIME")))))) {
 
 			scheduleType = 1;
 
@@ -362,7 +362,7 @@ public class TaxiBookingQuartz {
 		 * scheduleType = 2;
 		 * 
 		 * }
-		 */else if ((timeDiff > (1000 * 60 * (Constants.MAX_BOOKING_TIME)))) {
+		 */else if ((timeDiff > (1000 * 60 * (Long.parseLong(ConfigDetails.constants.get("MAX_BOOKING_TIME")))))) {
 
 			scheduleType = 3;
 
@@ -393,11 +393,11 @@ public class TaxiBookingQuartz {
 			scheduleType = -1;
 
 		} else if ((timeDiff >= (1000 * 60 * (5)))
-				&& (timeDiff <= (1000 * 60 * (Constants.ADMIN_ADV_MANUAL_BOOKING_MIN_TIME)))) {
+				&& (timeDiff <= (1000 * 60 * (Long.parseLong(ConfigDetails.constants.get("ADMIN_ADV_MANUAL_BOOKING_MIN_TIME")))))) {
 
 			scheduleType = 1;
 
-		} else if ((timeDiff > (1000 * 60 * (Constants.ADMIN_ADV_MANUAL_BOOKING_MIN_TIME)))) {
+		} else if ((timeDiff > (1000 * 60 * (Long.parseLong(ConfigDetails.constants.get("ADMIN_ADV_MANUAL_BOOKING_MIN_TIME")))))) {
 
 			scheduleType = 2;
 
@@ -428,11 +428,11 @@ public class TaxiBookingQuartz {
 			scheduleType = -1;
 
 		} else if ((timeDiff >= (1000 * 60 * (5)))
-				&& (timeDiff <= (1000 * 60 * (Constants.ADMIN_ADV_MANUAL_BOOKING_MIN_TIME)))) {
+				&& (timeDiff <= (1000 * 60 * (Long.parseLong(ConfigDetails.constants.get("ADMIN_ADV_MANUAL_BOOKING_MIN_TIME")))))) {
 
 			scheduleType = 1;
 
-		} else if ((timeDiff > (1000 * 60 * (Constants.ADMIN_ADV_MANUAL_BOOKING_MIN_TIME)))) {
+		} else if ((timeDiff > (1000 * 60 * (Long.parseLong(ConfigDetails.constants.get("ADMIN_ADV_MANUAL_BOOKING_MIN_TIME")))))) {
 
 			scheduleType = 2;
 

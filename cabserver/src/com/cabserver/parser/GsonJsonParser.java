@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
 import com.cabserver.gson.pojo.GoogleDistanceMatrixResponse;
 import com.cabserver.gson.pojo.GoogleGeoCodeResponse;
 import com.cabserver.pojo.DriverMaster;
-import com.cabserver.util.Constants;
+import com.cabserver.util.ConfigDetails;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.test.GPSData;
@@ -233,7 +233,7 @@ public class GsonJsonParser {
 		String latlong = lat+","+longt;
 		
 		String urlStr = 
-				"http://"+Constants.GOOGLE_MAPS_API+"/maps/api/geocode/json?latlng="
+				"http://"+ConfigDetails.constants.get("GOOGLE_MAPS_API")+"/maps/api/geocode/json?latlng="
 						+ URLEncoder.encode(latlong, "UTF-8") + "&sensor=false";
 		
 		log.info("getAddressByLatLong >> urlStr="+urlStr);
@@ -278,7 +278,7 @@ public class GsonJsonParser {
 	public static HashMap<String, String> getLatLongtByAddress(String addr) throws IOException {
 		
 		String urlStr = 
-				"http://"+Constants.GOOGLE_MAPS_API+"/maps/api/geocode/json?address="
+				"http://"+ConfigDetails.constants.get("GOOGLE_MAPS_API")+"/maps/api/geocode/json?address="
 		+URLEncoder.encode(addr, "UTF-8")
 		+"&sensor=false";
 		
@@ -322,7 +322,7 @@ public class GsonJsonParser {
 	public static String getDistanceByAddress(String fromAddr, String driverAddr) throws IOException {
 
 		String urlStr = 
-				"http://"+Constants.GOOGLE_MAPS_API+"/maps/api/distancematrix/json?origins="
+				"http://"+ConfigDetails.constants.get("GOOGLE_MAPS_API")+"/maps/api/distancematrix/json?origins="
 		+URLEncoder.encode(fromAddr, "UTF-8")
 		+"&destinations="
 		+URLEncoder.encode(driverAddr, "UTF-8")

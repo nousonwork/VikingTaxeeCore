@@ -19,7 +19,7 @@ import com.cabserver.pojo.TravelMaster;
 import com.cabserver.pojo.UserMaster;
 import com.cabserver.scheduler.TaxiBookingQuartz;
 import com.cabserver.util.CacheBuilder;
-import com.cabserver.util.Constants;
+import com.cabserver.util.ConfigDetails;
 import com.cabserver.util.MyUtil;
 
 public class DatabaseManager {
@@ -36,13 +36,13 @@ public class DatabaseManager {
 			if ((DatabaseManager.conn == null)
 					|| (DatabaseManager.conn.isClosed() == true)) {
 
-				String url = "jdbc:mysql://" + Constants.DATABASE_IP + ":"
-						+ Constants.DATABASE_PORT + "/"
-						+ Constants.DATABASE_NAME;
+				String url = "jdbc:mysql://" + ConfigDetails.constants.get("DATABASE_IP") + ":"
+						+ ConfigDetails.constants.get("DATABASE_PORT") + "/"
+						+ ConfigDetails.constants.get("DATABASE_NAME");
 				Class.forName("com.mysql.jdbc.Driver").newInstance();
 
 				DatabaseManager.conn = DriverManager.getConnection(url,
-						Constants.DATABASE_USER, Constants.DATABASE_PASSWORD);
+						ConfigDetails.constants.get("DATABASE_USER"), ConfigDetails.constants.get("DATABASE_PASSWORD"));
 				// log.info("Inside DatabaseManager >> getConnection >> Database connection established");
 
 			} else {
@@ -68,12 +68,12 @@ public class DatabaseManager {
 
 		try {
 
-			String url = "jdbc:mysql://" + Constants.DATABASE_IP + ":"
-					+ Constants.DATABASE_PORT + "/" + Constants.DATABASE_NAME;
+			String url = "jdbc:mysql://" + ConfigDetails.constants.get("DATABASE_IP") + ":"
+					+ ConfigDetails.constants.get("DATABASE_PORT") + "/" + ConfigDetails.constants.get("DATABASE_NAME");
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 
 			DatabaseManager.conn = DriverManager.getConnection(url,
-					Constants.DATABASE_USER, Constants.DATABASE_PASSWORD);
+					ConfigDetails.constants.get("DATABASE_USER"), ConfigDetails.constants.get("DATABASE_PASSWORD"));
 			// conn.setTransactionIsolation(com.mysql.jdbc.Connection.TRANSACTION_READ_COMMITTED);
 			// log.info("Inside DatabaseManager >> getConnection >> Refreshed Database connection established");
 
@@ -190,14 +190,14 @@ public class DatabaseManager {
 					conn.commit();
 				}
 
-				ResultSet _reg_rs = query.getGeneratedKeys();
+				//ResultSet _reg_rs = query.getGeneratedKeys();
 
-				long _gen_id = _reg_rs.next() ? _reg_rs.getInt(1) : 0;
+				//long _gen_id = _reg_rs.next() ? _reg_rs.getInt(1) : 0;
 
-				_reg_rs.close();
+				//_reg_rs.close();
 
-				umast.setUserId(_gen_id + "");
-				log.info("Updated UserMaster  >> userId=" + _gen_id);
+				//umast.setUserId(_gen_id + "");
+				//log.info("Updated UserMaster  >> userId=" + _gen_id);
 
 			}
 
@@ -329,7 +329,7 @@ public class DatabaseManager {
 			query.setString(6, tm.getMobileOperator());
 			query.setString(7, tm.getAirline());
 			query.setString(8, tm.getFlightNumber());
-			query.setInt(9, Constants.MANUAL_BOOKING_ACTIVE_STATUS);
+			query.setInt(9, Integer.parseInt(ConfigDetails.constants.get("MANUAL_BOOKING_ACTIVE_STATUS")));
 			query.setString(10, tm.getBookingId());
 
 			int i = 0;
@@ -392,7 +392,7 @@ public class DatabaseManager {
 			query.setString(8, dm.getAddress());
 			query.setString(9, dm.getDriverLicense());
 			query.setString(10, dm.getPhoneNumber());
-			query.setString(11, Constants.DRIVER_STATUS_FREE_STR);
+			query.setString(11, ConfigDetails.constants.get("DRIVER_STATUS_FREE_STR"));
 			query.setInt(12, (dm.getDriverCategory()) > 0 ? 1 : 0);
 			query.setString(13, dm.getMobileOperator());
 
@@ -636,7 +636,7 @@ public class DatabaseManager {
 					DBQurries.assign_BookingId_to_driver_in_DriverMaster,
 					Statement.RETURN_GENERATED_KEYS);
 			query2.setBigDecimal(1, new BigDecimal(bookingId));
-			query2.setString(2, Constants.DRIVER_STATUS_BUSY_STR);
+			query2.setString(2, ConfigDetails.constants.get("DRIVER_STATUS_BUSY_STR"));
 			query2.setBigDecimal(3, new BigDecimal(driverId));
 
 			int j = 0;
@@ -699,9 +699,9 @@ public class DatabaseManager {
 		try {
 
 			if (tm.getBookingStatusCode().equalsIgnoreCase(
-					Constants.INCORRECT_ADDRESS_CODE)
+					ConfigDetails.constants.get("INCORRECT_ADDRESS_CODE"))
 					|| tm.getBookingStatusCode().equalsIgnoreCase(
-							Constants.BOOKING_SCHEDULED_CODE)) {
+							ConfigDetails.constants.get("BOOKING_SCHEDULED_CODE"))) {
 
 				try {
 
@@ -745,7 +745,7 @@ public class DatabaseManager {
 			}
 
 			if (tm.getBookingStatusCode().equalsIgnoreCase(
-					Constants.BOOKING_CONFORMED_CODE)) {
+					ConfigDetails.constants.get("BOOKING_CONFORMED_CODE"))) {
 				query2 = conn.prepareStatement(
 						DBQurries.delete_BookingId_for_Driver_in_DriverMaster,
 						Statement.RETURN_GENERATED_KEYS);
@@ -1043,7 +1043,7 @@ public class DatabaseManager {
 							DBQurries.update_manual_Booking_active_Status_in_TravelMaster,
 							Statement.RETURN_GENERATED_KEYS);
 
-			query.setInt(1, Constants.MANUAL_BOOKING_ACTIVE_STATUS);
+			query.setInt(1, Integer.parseInt(ConfigDetails.constants.get("MANUAL_BOOKING_ACTIVE_STATUS")));
 			query.setString(2, bookingId);
 
 			int i = 0;
@@ -1575,9 +1575,9 @@ public class DatabaseManager {
 			query = conn.prepareStatement(
 					DBQurries.select_all_by_statusCode_from_TravelMaster,
 					Statement.RETURN_GENERATED_KEYS);
-			query.setString(1, Constants.BOOKING_FAILED_CODE);
-			query.setString(2, Constants.BOOKING_DENIED_CODE);
-			query.setString(3, Constants.INCORRECT_ADDRESS_CODE);
+			query.setString(1, ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
+			query.setString(2, ConfigDetails.constants.get("BOOKING_DENIED_CODE"));
+			query.setString(3, ConfigDetails.constants.get("INCORRECT_ADDRESS_CODE"));
 			query.setString(4, MyUtil.getCurrentDateFormattedString());
 			ResultSet rs1 = query.executeQuery();
 			while (rs1.next()) {
@@ -1919,7 +1919,7 @@ public class DatabaseManager {
 			  }
 			 
 
-			long booking_margin_time = ((1000 * 60) * Constants.ADMIN_ADV_MANUAL_BOOKING_MIN_TIME);
+			long booking_margin_time = ((1000 * 60) * Long.parseLong(ConfigDetails.constants.get("ADMIN_ADV_MANUAL_BOOKING_MIN_TIME")));
 			long currentTime = MyUtil.getCalanderFromDateStr(MyUtil.getCurrentDateFormattedString()).getTimeInMillis();//new Date().getTime();
 			log.info("currentTime = " + new Date(currentTime));
 			log.info("booknigTime = " + new Date(booknigTimeStamp));
@@ -2879,8 +2879,17 @@ public class DatabaseManager {
 
 				if (bd != 0 && role.length() > 1) {
 					um = new UserMaster();
-					um.setFirstName(firstName);
+					
 					um.setUserId(bd + "");
+					
+					um.setPhone(rs.getString("phone"));
+					um.setMobileOperator(rs.getString("mobileOperator"));
+					um.setFirstName(firstName);
+					um.setLastName(rs.getString("lastName"));
+					um.setSex(rs.getString("sex"));
+					um.setMailId(rs.getString("mailId"));
+					um.setAddress(rs.getString("address"));
+					
 
 					if (role.equalsIgnoreCase("user")) {
 						um.setAuthLevel(1);

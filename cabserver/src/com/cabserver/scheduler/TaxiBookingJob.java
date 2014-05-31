@@ -20,7 +20,7 @@ import com.cabserver.parser.GsonJsonParser;
 import com.cabserver.pojo.DriverMaster;
 import com.cabserver.pojo.TravelMaster;
 import com.cabserver.pojo.UserMaster;
-import com.cabserver.util.Constants;
+import com.cabserver.util.ConfigDetails;
 import com.cabserver.util.CacheBuilder;
 import com.cabserver.util.MyUtil;
 
@@ -105,7 +105,7 @@ public class TaxiBookingJob implements Job, org.quartz.InterruptableJob {
 								.get(key);
 
 						if (direverGD.getDriverStatus().equalsIgnoreCase(
-								Constants.DRIVER_STATUS_FREE_STR)
+								ConfigDetails.constants.get("DRIVER_STATUS_FREE_STR"))
 								&& direverGD.getDriverCategory() == 1) {
 							String distanceStr = GsonJsonParser
 									.getDistanceByAddress(tm.getFrom().trim(),
@@ -153,7 +153,7 @@ public class TaxiBookingJob implements Job, org.quartz.InterruptableJob {
 								DriverMaster selectedDriver = CacheBuilder.driversDataMap
 										.get(distMap.get(key));
 								selectedDriver
-										.setDriverStatus(Constants.DRIVER_STATUS_BUSY_STR);
+										.setDriverStatus(ConfigDetails.constants.get("DRIVER_STATUS_BUSY_STR"));
 
 								CacheBuilder.driversDataMap
 										.put(Long.parseLong(selectedDriver
@@ -169,8 +169,8 @@ public class TaxiBookingJob implements Job, org.quartz.InterruptableJob {
 								}*/
 
 								tm.setDriverId(distMap.get(key)+"");
-								tm.setBookingStatus(Constants.BOOKING_DRIVER_ACCEPT_PENDING_MSG);
-								tm.setBookingStatusCode(Constants.BOOKING_SCHEDULED_CODE);
+								tm.setBookingStatus(ConfigDetails.constants.get("BOOKING_DRIVER_ACCEPT_PENDING_MSG"));
+								tm.setBookingStatusCode(ConfigDetails.constants.get("BOOKING_SCHEDULED_CODE"));
 								
 								DatabaseManager.assignManualBookingDriverToTravelMaster(tm);
 								DatabaseManager

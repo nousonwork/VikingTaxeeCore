@@ -36,7 +36,7 @@ import com.cabserver.pojo.TravelMaster;
 import com.cabserver.pojo.UserMaster;
 import com.cabserver.scheduler.TaxiBookingQuartz;
 import com.cabserver.util.CacheBuilder;
-import com.cabserver.util.Constants;
+import com.cabserver.util.ConfigDetails;
 import com.cabserver.util.MyUtil;
 import com.google.gson.Gson;
 
@@ -98,7 +98,7 @@ public class Admin {
 				}
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Customer Update Data Error.");
 			}
 
@@ -188,7 +188,7 @@ public class Admin {
 				}
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Driver Update Data Error.");
 			}
 
@@ -313,7 +313,7 @@ public class Admin {
 						&& !tm.getDriverId().equalsIgnoreCase("0")
 						&& !tm.getDriverId().equalsIgnoreCase("null")) {
 
-					tm.setBookingType(Constants.MANUAL_BOOKING_TYPE);
+					tm.setBookingType(Integer.parseInt(ConfigDetails.constants.get("MANUAL_BOOKING_TYPE")));
 
 					assignDriverStatus = assignDriver(tm);
 
@@ -337,8 +337,8 @@ public class Admin {
 											.getDriverId());
 						}
 
-						tm.setBookingStatusCode(Constants.BOOKING_CONFORMED_CODE);
-						tm.setBookingStatus(Constants.BOOKING_CONFORMED_MSG);
+						tm.setBookingStatusCode(ConfigDetails.constants.get("BOOKING_CONFORMED_CODE"));
+						tm.setBookingStatus(ConfigDetails.constants.get("BOOKING_CONFORMED_MSG"));
 						DatabaseManager.updateBookingStatus(tm);
 
 						TravelMaster tm1 = DatabaseManager
@@ -356,7 +356,7 @@ public class Admin {
 
 							if (dm != null) {
 								dm.setBookingId(tm.getBookingId());
-								dm.setDriverStatus(Constants.DRIVER_STATUS_BUSY_STR);
+								dm.setDriverStatus(ConfigDetails.constants.get("DRIVER_STATUS_BUSY_STR"));
 
 								CacheBuilder.driversDataMap.put(
 										Long.parseLong(tm.getDriverId()), dm);
@@ -370,7 +370,7 @@ public class Admin {
 					} else {
 						log.info("updateBookingData >> assignDriverStatus = "
 								+ assignDriverStatus);
-						responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+						responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 						responseMap.put("msg",
 								"Driver is already booked for this time.");
 						responseMap.put(
@@ -416,9 +416,9 @@ public class Admin {
 									.get(Calendar.MINUTE)) {
 
 						log.info("updateBookingData >> No driverId and booking time changed.");
-						tm.setBookingStatusCode(Constants.BOOKING_SCHEDULED_CODE);
-						tm.setBookingStatus(Constants.BOOKING_SCHEDULED_MSG);
-						tm.setBookingType(Constants.SCHEDULED_BOOKING_TYPE);
+						tm.setBookingStatusCode(ConfigDetails.constants.get("BOOKING_SCHEDULED_CODE"));
+						tm.setBookingStatus(ConfigDetails.constants.get("BOOKING_SCHEDULED_MSG"));
+						tm.setBookingType(Integer.parseInt(ConfigDetails.constants.get("SCHEDULED_BOOKING_TYPE")));
 
 						int bookingStatus = TaxiBookingQuartz
 								.scheduleTaxiBookingJob(tm);
@@ -444,9 +444,9 @@ public class Admin {
 						} else {
 
 							responseMap.put("code",
-									Constants.BOOKING_FAILED_CODE);
+									ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 							responseMap.put("msg",
-									Constants.MIN_BOOKING_TIME_ERROR_MSG);
+									ConfigDetails.constants.get("MIN_BOOKING_TIME_ERROR_MSG"));
 							responseMap.put(
 									"bookingTime",
 									oldTime.get(Calendar.YEAR) + "-"
@@ -484,7 +484,7 @@ public class Admin {
 				}
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Booking Update Data Error.");
 			}
 
@@ -593,10 +593,12 @@ public class Admin {
 		if (arryTM.size() < 1) {
 
 			log.info("getBookingsList >> Bookings Error. HTTP booking history error code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
+			
+			
 
 			JSONObject obj1 = new JSONObject();
-			obj1.put("code", Constants.BOOKING_FAILED_CODE);
+			obj1.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			obj1.put("msg", "Bookings list not found.");
 			arryTM.add(obj1);
 
@@ -679,10 +681,10 @@ public class Admin {
 		if (arryTM.size() < 1) {
 
 			log.info("getDriversList >> Drivers search ErrorCcode is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
 			JSONObject obj1 = new JSONObject();
-			obj1.put("code", Constants.BOOKING_FAILED_CODE);
+			obj1.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			obj1.put("msg", "Drivers list not found.");
 			arryTM.add(obj1);
 
@@ -736,7 +738,7 @@ public class Admin {
 			 */
 
 			JSONObject obj1 = new JSONObject();
-			obj1.put("code", Constants.BOOKING_FAILED_CODE);
+			obj1.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			obj1.put("msg", "Drivers list not found.");
 			arryTM.add(obj1);
 
@@ -791,7 +793,7 @@ public class Admin {
 			 */
 
 			JSONObject obj1 = new JSONObject();
-			obj1.put("code", Constants.BOOKING_FAILED_CODE);
+			obj1.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			obj1.put("msg", "Drivers list not found.");
 			arryTM.add(obj1);
 
@@ -869,10 +871,10 @@ public class Admin {
 		if (arryTM.size() < 1) {
 
 			log.info("getCustomersList >> Customers search Error. HTTP customers search error code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
 			JSONObject obj1 = new JSONObject();
-			obj1.put("code", Constants.BOOKING_FAILED_CODE);
+			obj1.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			obj1.put("msg", "Customers list not found.");
 			arryTM.add(obj1);
 
@@ -909,7 +911,7 @@ public class Admin {
 					responseMap.put("code", "200");
 					responseMap.put("msg", "Mail sending details fetched.");
 
-					if (tmpUm.getMailType() == Constants.MAIL_TYPE_BOOKING) {
+					if (tmpUm.getMailType() == Integer.parseInt(ConfigDetails.constants.get("MAIL_TYPE_BOOKING"))) {
 						responseMap.put("distValue",
 								tmpUm.getTotalDistanceTravelled());
 						responseMap.put("fare", tmpUm.getFare());
@@ -925,7 +927,7 @@ public class Admin {
 						responseMap.put("bookingDateTime",
 								tmpUm.getBookingDateTime() + "");
 						responseMap.put("mailType", tmpUm.getMailType() + "");
-					} else if (tmpUm.getMailType() == Constants.MAIL_TYPE_FORGOT_PASSWORD) {
+					} else if (tmpUm.getMailType() == Integer.parseInt(ConfigDetails.constants.get("MAIL_TYPE_FORGOT_PASSWORD"))) {
 
 						responseMap.put("fromMailId", tmpUm.getFromMailId());
 						responseMap.put("toMailId", tmpUm.getToMailId());
@@ -949,7 +951,7 @@ public class Admin {
 			 * "getMailSendingDetails >> Mail details fetch Error. HTTP error code is "
 			 * + Constants.BOOKING_FAILED_CODE + ".");
 			 */
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Mail details list not found.");
 
 			return Response.status(200).entity(jsonCreater(responseMap))
@@ -1041,7 +1043,7 @@ public class Admin {
 			 * "getMailSendingDetails >> Mail details fetch Error. HTTP error code is "
 			 * + Constants.BOOKING_FAILED_CODE + ".");
 			 */
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Drivers notification details not found.");
 
 			return Response.status(200).entity(jsonCreater(responseMap))
@@ -1133,7 +1135,7 @@ public class Admin {
 			 * "getMailSendingDetails >> Mail details fetch Error. HTTP error code is "
 			 * + Constants.BOOKING_FAILED_CODE + ".");
 			 */
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Customers notification details not found.");
 
 			return Response.status(200).entity(jsonCreater(responseMap))
@@ -1202,13 +1204,13 @@ public class Admin {
 					responseMap.put("msg", "Driver Booking Status updated.");
 
 				} else {
-					responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+					responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 					responseMap.put("msg",
 							"Manual Booking details not updated.");
 				}
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Manual Booking data not available.");
 			}
 
@@ -1220,9 +1222,9 @@ public class Admin {
 
 			log.info("deleteDriverCancelBooking >>"
 					+ " Bookings Error. HTTP bookingStatus code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Server Error.");
 			return Response.status(200).entity(jsonCreater(responseMap))
 					.build();
@@ -1257,8 +1259,8 @@ public class Admin {
 
 			if (existingBookingValue == 0) {
 
-				tm.setBookingStatus(Constants.BOOKING_CONFORMED_MSG);
-				tm.setBookingStatusCode(Constants.BOOKING_CONFORMED_CODE);
+				tm.setBookingStatus(ConfigDetails.constants.get("BOOKING_CONFORMED_MSG"));
+				tm.setBookingStatusCode(ConfigDetails.constants.get("BOOKING_CONFORMED_CODE"));
 
 				int bookingType = TaxiBookingQuartz.scheduleTaxiBookingJob(tm);
 
@@ -1355,10 +1357,10 @@ public class Admin {
 		if (arryTM.size() < 1) {
 
 			log.info("getPendingBookingsList >> No pending bookings found. HTTP bookingStatus code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
 			JSONObject obj1 = new JSONObject();
-			obj1.put("code", Constants.BOOKING_FAILED_CODE);
+			obj1.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			obj1.put("msg", "No pending bookings.");
 			arryTM.add(obj1);
 
@@ -1422,7 +1424,7 @@ public class Admin {
 
 						try {
 
-							if (Constants.LOCAL_MAIL_SEND) {
+							if (Boolean.parseBoolean(ConfigDetails.constants.get("LOCAL_MAIL_SEND"))) {
 
 								Message message = new MimeMessage(
 										CacheBuilder.session);
@@ -1446,7 +1448,7 @@ public class Admin {
 								tm.setToMailId(um.getMailId());
 								tm.setSubject("VikingTaxee Account Password Information");
 								tm.setMailText(um.getPassword());
-								tm.setMailType(Constants.MAIL_TYPE_FORGOT_PASSWORD);
+								tm.setMailType(Integer.parseInt(ConfigDetails.constants.get("MAIL_TYPE_FORGOT_PASSWORD")));
 
 								CacheBuilder.mailSendingDataMap
 										.put((long) new Random()
@@ -1460,7 +1462,7 @@ public class Admin {
 					} else {
 						log.info("forgotPassword >> Password reset not done. Please call customer Care.");
 
-						responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+						responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 						responseMap
 								.put("msg",
 										"Forgot password process can not be completed. Please call customer Care.");
@@ -1478,9 +1480,9 @@ public class Admin {
 		if (responseMap.size() < 1) {
 
 			log.info("Login Error. HTTP bookingStatus code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Server Error.");
 			return Response.status(200).entity(jsonCreater(responseMap))
 					.build();
@@ -1561,7 +1563,7 @@ public class Admin {
 
 			log.info("Driver notification Error.");
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Notification Error. Please try again.");
 			return Response.status(200).entity(jsonCreater(responseMap))
 					.build();
@@ -1655,7 +1657,7 @@ public class Admin {
 
 			log.info("Customer notification Error.");
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Notification Error. Please try again.");
 			return Response.status(200).entity(jsonCreater(responseMap))
 					.build();
@@ -1735,8 +1737,8 @@ public class Admin {
 				// log.info("driverId >> to =" + driverId);
 				tm.setDriverId(driverId);
 
-				tm.setBookingType(Constants.MANUAL_BOOKING_TYPE);
-				tm.setActivationStatus(Constants.MANUAL_BOOKING_DEACTIVE_STATUS);
+				tm.setBookingType(Integer.parseInt(ConfigDetails.constants.get("MANUAL_BOOKING_TYPE")));
+				tm.setActivationStatus(Integer.parseInt(ConfigDetails.constants.get("MANUAL_BOOKING_DEACTIVE_STATUS")));
 
 				String date = (String) obj.get("date");
 				String month = (String) obj.get("month");
@@ -1812,7 +1814,7 @@ public class Admin {
 							tm.setToLongt((String) toLatLng.get("lat"));
 
 						} catch (Exception e) {
-							addressStatus = Constants.INCORRECT_ADDRESS_CODE;
+							addressStatus = ConfigDetails.constants.get("INCORRECT_ADDRESS_CODE");
 
 							tm.setFromLat("123");
 							tm.setFromLongt("123");
@@ -1861,19 +1863,19 @@ public class Admin {
 
 						if (bookingType <= 0) {
 							responseMap.put("code",
-									Constants.BOOKING_FAILED_CODE);
+									ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 							responseMap.put("msg",
-									Constants.ADMIN_MIN_BOOKING_TIME_ERROR_MSG);
+									ConfigDetails.constants.get("ADMIN_MIN_BOOKING_TIME_ERROR_MSG"));
 						} else {
 
 							if (addressStatus
-									.equalsIgnoreCase(Constants.INCORRECT_ADDRESS_CODE)) {
-								tm.setBookingStatus(Constants.INCORRECT_ADDRESS_MSG);
+									.equalsIgnoreCase(ConfigDetails.constants.get("INCORRECT_ADDRESS_CODE"))) {
+								tm.setBookingStatus(ConfigDetails.constants.get("INCORRECT_ADDRESS_MSG"));
 								tm.setBookingStatusCode(addressStatus);
 
 							} else {
-								tm.setBookingStatusCode(Constants.BOOKING_CONFORMED_CODE);
-								tm.setBookingStatus(Constants.BOOKING_CONFORMED_MSG);
+								tm.setBookingStatusCode(ConfigDetails.constants.get("BOOKING_CONFORMED_CODE"));
+								tm.setBookingStatus(ConfigDetails.constants.get("BOOKING_CONFORMED_MSG"));
 							}
 
 							// TBD for 2 Hours checking logic
@@ -1922,7 +1924,7 @@ public class Admin {
 										responseMap.put("code", "200");
 										responseMap
 												.put("msg",
-														Constants.BOOKING_CONFORMED_MSG);
+														ConfigDetails.constants.get("BOOKING_CONFORMED_MSG"));
 										responseMap
 												.put("travellerPhone", phone);
 										responseMap.put(
@@ -1945,21 +1947,21 @@ public class Admin {
 										responseMap.put("code", "200");
 										responseMap
 												.put("msg",
-														Constants.BOOKING_CONFORMED_MSG);
+														ConfigDetails.constants.get("BOOKING_CONFORMED_MSG"));
 
 									} else if (bookingStatus <= 0) {
 
-										tmFrmDB.setBookingStatusCode(Constants.BOOKING_FAILED_CODE);
-										tmFrmDB.setBookingStatus(Constants.BOOKING_FAILED_MSG);
+										tmFrmDB.setBookingStatusCode(ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
+										tmFrmDB.setBookingStatus(ConfigDetails.constants.get("BOOKING_FAILED_MSG"));
 										DatabaseManager
 												.updateBookingStatus(tmFrmDB);
 
 										responseMap.put("code",
-												Constants.BOOKING_FAILED_CODE);
+												ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 										if (bookingStatus < 0) {
 											responseMap
 													.put("msg",
-															Constants.MIN_BOOKING_TIME_ERROR_MSG);
+															ConfigDetails.constants.get("MIN_BOOKING_TIME_ERROR_MSG"));
 										} else if (bookingStatus == 0) {
 											responseMap
 													.put("msg",
@@ -1970,13 +1972,13 @@ public class Admin {
 
 								} else {
 									responseMap.put("code",
-											Constants.BOOKING_FAILED_CODE);
+											ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 									responseMap.put("msg",
 											"Booking creation error.");
 								}
 							} else {
 								responseMap.put("code",
-										Constants.BOOKING_FAILED_CODE);
+										ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 								responseMap
 										.put("msg",
 												"Driver has a booking at "
@@ -1987,23 +1989,23 @@ public class Admin {
 						}
 
 					} else {
-						responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+						responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 						responseMap.put("msg", "Server data booking details.");
 					}
 
 				} else {
 
-					responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+					responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 					responseMap.put("msg", "Incorrect booking details.");
 				}
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Incorrect booking data.");
 			}
 
 		} catch (Exception e) {
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Incorrect booking data.");
 			e.printStackTrace();
 		}
@@ -2011,9 +2013,9 @@ public class Admin {
 		if (responseMap.size() < 1) {
 
 			log.info("addManualBookings >> Bookings Error. HTTP bookingStatus code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Server Error.");
 			return Response.status(200).entity(jsonCreater(responseMap))
 					.build();

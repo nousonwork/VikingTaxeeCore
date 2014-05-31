@@ -1,6 +1,8 @@
 package com.cabserver.util;
 
-public class Constants {
+import java.util.HashMap;
+
+public class ConfigDetails {
 	
 	//public static final String PROXY_HOST = "rtecproxy.ril.com";
 	//public static final int PROXY_PORT = 8080;
@@ -11,7 +13,15 @@ public class Constants {
 	//public static final String CABGURU_SERVER_IP_PORT = "10.0.2.2:9797";
 	//public static final String CABGURU_SERVER_IP_PORT = "115.241.234.156:9797";
 	
-	public static final String DATABASE_IP="127.0.0.1";	
+public static HashMap<String, String> constants;
+	
+	static{
+		constants = new HashMap<>();
+	}
+	
+	
+	
+	/*public static final String DATABASE_IP="127.0.0.1";	
 	public static final String DATABASE_PORT = "3306";
 	public static final String DATABASE_NAME = "cabguru";
 	public static final String DATABASE_USER = "root";
@@ -92,6 +102,6 @@ public class Constants {
 	
 	public static boolean LOCAL_MAIL_SEND = true;
 	
-	public static long DRIVER_MAP_ICON_DISABLE_TIME = (1000 * 60 * 60 * 12) ;
+	public static long DRIVER_MAP_ICON_DISABLE_TIME = (1000 * 60 * 60 * 12) ;*/
 	
 }

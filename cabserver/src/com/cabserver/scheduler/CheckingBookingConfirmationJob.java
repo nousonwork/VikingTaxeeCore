@@ -11,7 +11,7 @@ import org.quartz.UnableToInterruptJobException;
 
 import com.cabserver.db.DatabaseManager;
 import com.cabserver.pojo.TravelMaster;
-import com.cabserver.util.Constants;
+import com.cabserver.util.ConfigDetails;
 
 @DisallowConcurrentExecution
 public class CheckingBookingConfirmationJob implements Job, org.quartz.InterruptableJob {
@@ -68,21 +68,21 @@ public class CheckingBookingConfirmationJob implements Job, org.quartz.Interrupt
 		
 		TravelMaster tm1 = DatabaseManager.searchBookingDetailsByBookingId(tm.getBookingId());
 		
-		if(tm1!= null && (tm1.getBookingStatusCode().equalsIgnoreCase(Constants.BOOKING_CONFORMED_CODE) 
-				|| tm1.getBookingStatusCode().equalsIgnoreCase(Constants.BOOKING_ON_THE_WAY_CODE)
-				|| tm1.getBookingStatusCode().equalsIgnoreCase(Constants.BOOKING_DROPPED_CODE) 
-				|| tm1.getBookingStatusCode().equalsIgnoreCase(Constants.BOOKING_DENIED_CODE)) ){
+		if(tm1!= null && (tm1.getBookingStatusCode().equalsIgnoreCase(ConfigDetails.constants.get("BOOKING_CONFORMED_CODE")) 
+				|| tm1.getBookingStatusCode().equalsIgnoreCase(ConfigDetails.constants.get("BOOKING_ON_THE_WAY_CODE"))
+				|| tm1.getBookingStatusCode().equalsIgnoreCase(ConfigDetails.constants.get("BOOKING_DROPPED_CODE")) 
+				|| tm1.getBookingStatusCode().equalsIgnoreCase(ConfigDetails.constants.get("BOOKING_DENIED_CODE"))) ){
 			bookingStatus = true;
 		}else{
 			bookingStatus = false;
 			if(tm1!= null){
 				if(tm1.getDriverId() != null && !(tm1.getDriverId().equalsIgnoreCase("0"))){
-					tm1.setBookingStatus(Constants.BOOKING_DRIVER_DID_NOT_ACCEPTED_MSG);
+					tm1.setBookingStatus(ConfigDetails.constants.get("BOOKING_DRIVER_DID_NOT_ACCEPTED_MSG"));
 				}else{
-					tm1.setBookingStatus(Constants.BOOKING_FAILED_MSG);
+					tm1.setBookingStatus(ConfigDetails.constants.get("BOOKING_FAILED_MSG"));
 				}
 				
-				tm1.setBookingStatusCode(Constants.BOOKING_FAILED_CODE);
+				tm1.setBookingStatusCode(ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				boolean driverRemoveFromTravelMasterStatus = DatabaseManager.removeDriverFromBookingInTravelMaster(tm1);
 				
 				String driverId = tm1.getDriverId();

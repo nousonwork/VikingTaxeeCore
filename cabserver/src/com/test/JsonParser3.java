@@ -8,7 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
-import com.cabserver.util.Constants;
+import com.cabserver.util.ConfigDetails;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -100,7 +100,7 @@ public class JsonParser3 {
 		System.getProperties().put("http.proxyUser", "shankar.mohanty");
 		System.getProperties().put("http.proxyPassword", "cu141#123");
 		URL url = new URL(
-				"http://"+Constants.GOOGLE_MAPS_API+"/maps/api/geocode/json?latlng="
+				"http://"+ConfigDetails.constants.get("GOOGLE_MAPS_API")+"/maps/api/geocode/json?latlng="
 						+ address + "&sensor=false");
 		URLConnection connection = url.openConnection();
 		BufferedReader in = new BufferedReader(new InputStreamReader(

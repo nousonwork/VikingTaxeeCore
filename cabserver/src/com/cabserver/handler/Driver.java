@@ -23,7 +23,7 @@ import com.cabserver.db.DatabaseManager;
 import com.cabserver.pojo.DriverMaster;
 import com.cabserver.pojo.TravelMaster;
 import com.cabserver.util.CacheBuilder;
-import com.cabserver.util.Constants;
+import com.cabserver.util.ConfigDetails;
 import com.cabserver.util.MyUtil;
 
 @Path("drivers")
@@ -96,9 +96,9 @@ public class Driver {
 
 					} else {
 						log.info("login >> Login Error. HTTP bookingStatus code is "
-								+ Constants.BOOKING_FAILED_CODE + ".");
+								+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
-						responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+						responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 						responseMap.put("msg", "Driver phone doesn't exists.");
 					}
 
@@ -113,9 +113,9 @@ public class Driver {
 		if (responseMap.size() < 1) {
 
 			log.info("Login Error. HTTP bookingStatus code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Server Error.");
 			return Response.status(200).entity(jsonCreater(responseMap))
 					.build();
@@ -231,12 +231,12 @@ public class Driver {
 					}
 
 				} else {
-					responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+					responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 					responseMap.put("msg", "Driver Phone number Error.");
 				}
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Data Error.");
 			}
 
@@ -309,12 +309,12 @@ public class Driver {
 					responseMap.put("msg", "Driver deleted.");
 
 				} else {
-					responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+					responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 					responseMap.put("msg", "Driver not deleted.");
 				}
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Driver data not availale.");
 			}
 
@@ -325,9 +325,9 @@ public class Driver {
 		if (responseMap.size() < 1) {
 
 			log.info("deleteDriver >>" + " Driver delete error. HTTP code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Server Error.");
 			return Response.status(200).entity(jsonCreater(responseMap))
 					.build();
@@ -425,18 +425,18 @@ public class Driver {
 									.deleteBookingIdFromDriverMaster(driverId);
 						}
 
-						responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+						responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 						responseMap
 								.put("msg", "Booking details not available.");
 					}
 				}else{
-					responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+					responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 					responseMap
 							.put("msg", "Booking details not available.");
 				}
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Booking data not available.");
 			}
 
@@ -447,9 +447,9 @@ public class Driver {
 		if (responseMap.size() < 1) {
 
 			log.info("getBookingDetails >> Bookings Error. HTTP bookingStatus code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Server Error.");
 			return Response.status(200).entity(jsonCreater(responseMap))
 					.build();
@@ -487,7 +487,7 @@ public class Driver {
 						
 						long driverInActiveTimeDiff = currentTime - driverLastLocUpdateTime;
 						
-						if( driverInActiveTimeDiff < Constants.DRIVER_MAP_ICON_DISABLE_TIME){
+						if( driverInActiveTimeDiff < Long.parseLong(ConfigDetails.constants.get("DRIVER_MAP_ICON_DISABLE_TIME"))){
 							
 							HashMap<String, String> map = new HashMap<String, String>();
 							map.put("driverId", dm.getDriverId() + "");
@@ -517,7 +517,7 @@ public class Driver {
 			} else {
 
 				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("code", Constants.BOOKING_FAILED_CODE);
+				map.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				map.put("msg", "No drivers are provisioned.");
 				JSONObject obj = new JSONObject();
 				obj.putAll(map);
@@ -532,10 +532,10 @@ public class Driver {
 		if (jsonArray.size() < 1) {
 
 			log.info("getDriversLocation >> Bookings Error. HTTP bookingStatus code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
 			HashMap<String, String> map = new HashMap<String, String>();
-			map.put("code", Constants.BOOKING_FAILED_CODE);
+			map.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			map.put("msg", "Server Error.");
 			JSONObject obj = new JSONObject();
 			obj.putAll(map);
@@ -649,7 +649,7 @@ public class Driver {
 						}
 
 					} else {
-						responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+						responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 						responseMap.put("msg", "Driver location not updated.");
 					}
 					
@@ -658,7 +658,7 @@ public class Driver {
 				
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Driver location null.");
 			}
 
@@ -674,7 +674,7 @@ public class Driver {
 			 * +Constants.BOOKING_FAILED_CODE+"." );
 			 */
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Server Error.");
 			return Response.status(200).entity(jsonCreater(responseMap))
 					.build();
@@ -754,17 +754,17 @@ public class Driver {
 						 */
 
 						if (tm.getBookingStatus().equalsIgnoreCase(
-								Constants.BOOKING_SCHEDULED_MSG)) {
+								ConfigDetails.constants.get("BOOKING_SCHEDULED_MSG"))) {
 							responseMap.put("code",
-									Constants.BOOKING_SCHEDULED_CODE);
+									ConfigDetails.constants.get("BOOKING_SCHEDULED_CODE"));
 						} else if (tm.getBookingStatus().equalsIgnoreCase(
-								Constants.BOOKING_CONFORMED_MSG)) {
+								ConfigDetails.constants.get("BOOKING_CONFORMED_MSG"))) {
 							responseMap.put("code",
-									Constants.BOOKING_CONFORMED_CODE);
+									ConfigDetails.constants.get("BOOKING_CONFORMED_CODE"));
 						} else if (tm.getBookingStatus().equalsIgnoreCase(
-								Constants.BOOKING_ON_THE_WAY_MSG)) {
+								ConfigDetails.constants.get("BOOKING_ON_THE_WAY_MSG"))) {
 							responseMap.put("code",
-									Constants.BOOKING_ON_THE_WAY_CODE);
+									ConfigDetails.constants.get("BOOKING_ON_THE_WAY_CODE"));
 						}
 
 						responseMap.put("msg", "Booking details fetched.");
@@ -788,10 +788,10 @@ public class Driver {
 								tm.getTravellerPhone());
 
 					} else if (bookingId == 0) {
-						responseMap.put("code", Constants.BOOKING_DROPPED_CODE);
+						responseMap.put("code", ConfigDetails.constants.get("BOOKING_DROPPED_CODE"));
 					}
 				} else if (bookingId == 0) {
-					responseMap.put("code", Constants.BOOKING_DROPPED_CODE);
+					responseMap.put("code", ConfigDetails.constants.get("BOOKING_DROPPED_CODE"));
 				}
 
 				/*
@@ -801,7 +801,7 @@ public class Driver {
 				 */
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Booking data not available.");
 			}
 
@@ -817,7 +817,7 @@ public class Driver {
 			 * +Constants.BOOKING_FAILED_CODE+"." );
 			 */
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Server Error.");
 			return Response.status(200).entity(jsonCreater(responseMap))
 					.build();
@@ -952,17 +952,17 @@ public class Driver {
 							 */
 
 							if (tm.getBookingStatus().equalsIgnoreCase(
-									Constants.BOOKING_SCHEDULED_MSG)) {
+									ConfigDetails.constants.get("BOOKING_SCHEDULED_MSG"))) {
 								responseMap.put("code",
-										Constants.BOOKING_SCHEDULED_CODE);
+										ConfigDetails.constants.get("BOOKING_SCHEDULED_CODE"));
 							} else if (tm.getBookingStatus().equalsIgnoreCase(
-									Constants.BOOKING_CONFORMED_MSG)) {
+									ConfigDetails.constants.get("BOOKING_CONFORMED_MSG"))) {
 								responseMap.put("code",
-										Constants.BOOKING_CONFORMED_CODE);
+										ConfigDetails.constants.get("BOOKING_CONFORMED_CODE"));
 							} else if (tm.getBookingStatus().equalsIgnoreCase(
-									Constants.BOOKING_ON_THE_WAY_MSG)) {
+									ConfigDetails.constants.get("BOOKING_ON_THE_WAY_MSG"))) {
 								responseMap.put("code",
-										Constants.BOOKING_ON_THE_WAY_CODE);
+										ConfigDetails.constants.get("BOOKING_ON_THE_WAY_CODE"));
 							}
 
 							responseMap.put("msg", "Booking details fetched.");
@@ -992,10 +992,10 @@ public class Driver {
 
 						} else if (bookingId == 0) {
 							responseMap.put("code",
-									Constants.BOOKING_DROPPED_CODE);
+									ConfigDetails.constants.get("BOOKING_DROPPED_CODE"));
 						}
 					} else if (bookingId == 0) {
-						responseMap.put("code", Constants.BOOKING_DROPPED_CODE);
+						responseMap.put("code", ConfigDetails.constants.get("BOOKING_DROPPED_CODE"));
 					}
 
 					/*
@@ -1005,12 +1005,12 @@ public class Driver {
 					 */
 
 				} else {
-					responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+					responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 					responseMap.put("msg", "Booking details not available.");
 				}
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Booking data not available.");
 			}
 
@@ -1026,7 +1026,7 @@ public class Driver {
 			 * +Constants.BOOKING_FAILED_CODE+"." );
 			 */
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Server Error.");
 			return Response.status(200).entity(jsonCreater(responseMap))
 					.build();
@@ -1101,13 +1101,13 @@ public class Driver {
 					responseMap.put("msg", "Driver Booking Status updated.");
 
 				} else {
-					responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+					responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 					responseMap.put("msg",
 							"Driver Booking details not updated.");
 				}
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Booking data not available.");
 			}
 
@@ -1119,9 +1119,9 @@ public class Driver {
 
 			log.info("updateDriverBookingStatus >>"
 					+ " Bookings Error. HTTP bookingStatus code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Server Error.");
 			return Response.status(200).entity(jsonCreater(responseMap))
 					.build();

@@ -218,7 +218,7 @@ public class MyUtil {
 	public static String getCurrentDateFormattedString() {
 
 		DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss a");
-		formatter.setTimeZone(TimeZone.getTimeZone(Constants.LOCALE_VALUE));
+		formatter.setTimeZone(TimeZone.getTimeZone(ConfigDetails.constants.get("LOCALE_VALUE")));
 
 		String dateStr = formatter.format(new Date());
 		//log.info("getCurrentDateFormattedString >> dateStr = " + dateStr);
@@ -229,7 +229,7 @@ public class MyUtil {
 	public static String getDateFormattedStringbyDate(Date date) {
 
 		DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss a");
-		formatter.setTimeZone(TimeZone.getTimeZone(Constants.LOCALE_VALUE));
+		formatter.setTimeZone(TimeZone.getTimeZone(ConfigDetails.constants.get("LOCALE_VALUE")));
 
 		return formatter.format(date);
 	}
@@ -283,7 +283,7 @@ public class MyUtil {
 					.updateDistanceAndFare(distValue, Double.parseDouble(fare),
 							Long.parseLong(tm.getBookingId()));
 
-			if (Constants.LOCAL_MAIL_SEND) {
+			if (Boolean.parseBoolean(ConfigDetails.constants.get("LOCAL_MAIL_SEND"))) {
 
 				Message message = new MimeMessage(CacheBuilder.session);
 				message.setFrom(new InternetAddress("VikingTaxee@gmail.com"));
@@ -313,7 +313,7 @@ public class MyUtil {
 				tm.setToMailId(receiverId);
 				tm.setSubject("Booking Details");
 				tm.setFare(fare);
-				tm.setMailType(Constants.MAIL_TYPE_BOOKING);
+				tm.setMailType(Integer.parseInt(ConfigDetails.constants.get("MAIL_TYPE_BOOKING")));
 
 				CacheBuilder.mailSendingDataMap.put(
 						(long) new Random().nextInt(100000),
@@ -360,17 +360,17 @@ public class MyUtil {
 	public static String getMobileOperatorDomain(String operatorName) {
 
 		if (operatorName.equalsIgnoreCase("Sprint")) {
-			return Constants.SMS_SPRINT;
+			return ConfigDetails.constants.get("SMS_SPRINT");
 		} else if (operatorName.equalsIgnoreCase("ATnT")) {
-			return Constants.SMS_ATnT;
+			return ConfigDetails.constants.get("SMS_ATnT");
 		} else if (operatorName.equalsIgnoreCase("Verizon")) {
-			return Constants.SMS_VERIZON;
+			return ConfigDetails.constants.get("SMS_VERIZON");
 		} else if (operatorName.equalsIgnoreCase("TMobile")) {
-			return Constants.SMS_TMOBILE;
+			return ConfigDetails.constants.get("SMS_TMOBILE");
 		} else if (operatorName.equalsIgnoreCase("VirginMobile")) {
-			return Constants.SMS_VIRGIN_MOBILE;
+			return ConfigDetails.constants.get("SMS_VIRGIN_MOBILE");
 		} else if (operatorName.equalsIgnoreCase("BoostMobile")) {
-			return Constants.SMS_BOOST_MOBILE;
+			return ConfigDetails.constants.get("SMS_BOOST_MOBILE");
 		} else {
 			return "";
 		}

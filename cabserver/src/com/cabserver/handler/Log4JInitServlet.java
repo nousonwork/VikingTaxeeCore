@@ -1,6 +1,10 @@
 package com.cabserver.handler;
 
 import java.io.File;
+import java.io.InputStream;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -9,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.PropertyConfigurator;
+
+import com.cabserver.util.ConfigDetails;
 
 public class Log4JInitServlet extends HttpServlet {
 
@@ -38,5 +44,35 @@ public class Log4JInitServlet extends HttpServlet {
 			}
 		}
 		super.init(config);
+		
+		
+		String constantsLocation = config
+				.getInitParameter("constants-properties-location");
+
+		try {
+
+			Properties props = new Properties();
+			InputStream stream = sc.getResourceAsStream(constantsLocation);
+			props.load(stream);
+			stream.close();
+
+			Iterator keyIterator = props.keySet().iterator();
+			while (keyIterator.hasNext()) {
+				String key = (String) keyIterator.next();
+				String value = (String) props.getProperty(key);
+				// System.out.println("key:" + key + " value: " + value);
+				ConfigDetails.constants.put(key, value);
+			}
+
+			Iterator it = ConfigDetails.constants.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry pairs = (Map.Entry) it.next();
+				System.out.println(pairs.getKey() + " = " + pairs.getValue());
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

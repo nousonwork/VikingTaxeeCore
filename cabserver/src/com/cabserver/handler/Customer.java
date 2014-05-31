@@ -25,7 +25,7 @@ import com.cabserver.pojo.TravelMaster;
 import com.cabserver.pojo.UserMaster;
 import com.cabserver.scheduler.TaxiBookingQuartz;
 import com.cabserver.util.CacheBuilder;
-import com.cabserver.util.Constants;
+import com.cabserver.util.ConfigDetails;
 import com.cabserver.util.MyUtil;
 
 @Path("customers")
@@ -85,9 +85,16 @@ public class Customer {
 						responseMap.put("code", "200");
 						responseMap.put("msg", "Login Succesful.");
 						responseMap.put("authLevel", um.getAuthLevel() + "");
-						responseMap.put("name", um.getFirstName());
 						responseMap.put("userId", um.getUserId());
-						responseMap.put("phone", phone);
+						
+						responseMap.put("phone", um.getPhone());
+						responseMap.put("mobileOperator", um.getMobileOperator());
+						responseMap.put("name", um.getFirstName());
+						responseMap.put("lastName", um.getLastName());
+						responseMap.put("sex", um.getSex());
+						responseMap.put("mailId", um.getMailId());
+						responseMap.put("address", um.getAddress());
+						
 					} else if (um != null && um.getAuthLevel() == 2) {
 
 						// log.info("Admin Login Successfull. HTTP code is 200.");
@@ -95,14 +102,23 @@ public class Customer {
 						responseMap.put("code", "200");
 						responseMap.put("msg", "Login Succesful.");
 						responseMap.put("authLevel", um.getAuthLevel() + "");
-						responseMap.put("name", um.getFirstName());
 						responseMap.put("userId", um.getUserId());
-						responseMap.put("phone", phone);
+						
+						
+						responseMap.put("phone", um.getPhone());
+						responseMap.put("mobileOperator", um.getMobileOperator());
+						responseMap.put("name", um.getFirstName());
+						responseMap.put("lastName", um.getLastName());
+						responseMap.put("sex", um.getSex());
+						responseMap.put("mailId", um.getMailId());
+						responseMap.put("address", um.getAddress());
+						
+						
 					} else {
 						log.info("Login Error. HTTP code is "
-								+ Constants.BOOKING_FAILED_CODE + ".");
+								+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
-						responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+						responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 						responseMap.put("msg", "Incorrect phone or password.");
 						responseMap.put("authLevel", "");
 					}
@@ -118,9 +134,9 @@ public class Customer {
 		if (responseMap.size() < 1) {
 
 			log.info("Login Error. HTTP bookingStatus code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Server Error.");
 			rb.status(200);
 			rb.entity(jsonCreater(responseMap));
@@ -236,12 +252,12 @@ public class Customer {
 					}
 
 				} else {
-					responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+					responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 					responseMap.put("msg", "Phone number Error.");
 				}
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Data Error.");
 			}
 
@@ -312,12 +328,12 @@ public class Customer {
 					responseMap.put("msg", "Customer deleted.");
 
 				} else {
-					responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+					responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 					responseMap.put("msg", "Customer not deleted.");
 				}
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Customer data not availale.");
 			}
 
@@ -329,9 +345,9 @@ public class Customer {
 
 			log.info("deleteCustomer >>"
 					+ " Customer delete error. HTTP code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Server Error.");
 			return Response.status(200).entity(jsonCreater(responseMap))
 					.build();
@@ -404,12 +420,12 @@ public class Customer {
 							userMaster.getMobileOperator());
 
 				} else {
-					responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+					responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 					responseMap.put("msg", "Customer not deleted.");
 				}
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Customer data not availale.");
 			}
 
@@ -421,9 +437,9 @@ public class Customer {
 
 			log.info("deleteCustomer >>"
 					+ " Customer delete error. HTTP code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Server Error.");
 			return Response.status(200).entity(jsonCreater(responseMap))
 					.build();
@@ -508,17 +524,17 @@ public class Customer {
 								tm.getTravellerPhone());
 
 					} else {
-						responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+						responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 						responseMap
 								.put("msg", "Booking details not available.");
 					}
 				} else {
-					responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+					responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 					responseMap.put("msg", "No Booking made.");
 				}
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Booking data not available.");
 			}
 
@@ -529,9 +545,9 @@ public class Customer {
 		if (responseMap.size() < 1) {
 
 			log.info("getBookingDetails >> Bookings Error. HTTP bookingStatus code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Server Error.");
 			return Response.status(200).entity(jsonCreater(responseMap))
 					.build();
@@ -614,7 +630,7 @@ public class Customer {
 						}
 					} else {
 						JSONObject errObj = new JSONObject();
-						errObj.put("code", Constants.BOOKING_FAILED_CODE);
+						errObj.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 						errObj.put("msg", "No Bookings.");
 						arryTM.add(errObj);
 					}
@@ -628,10 +644,10 @@ public class Customer {
 		if (arryTM.size() < 1) {
 
 			log.info("getBookingsList >> Bookings Error. HTTP bookingStatus code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
 			JSONObject errObj = new JSONObject();
-			errObj.put("code", Constants.BOOKING_FAILED_CODE);
+			errObj.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			errObj.put("msg", "Server Error.");
 			arryTM.add(errObj);
 			return Response.status(200).entity(arryTM.toJSONString()).build();
@@ -723,10 +739,10 @@ public class Customer {
 		if (arryTM.size() < 1) {
 
 			log.info("myBookingsHistory >> Bookings Error. HTTP booking history error code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
 			JSONObject obj1 = new JSONObject();
-			obj1.put("code", Constants.BOOKING_FAILED_CODE);
+			obj1.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			obj1.put("msg", "Bookings list not found.");
 			arryTM.add(obj1);
 
@@ -804,8 +820,8 @@ public class Customer {
 				// log.info("flightNumber >> to =" + flightNumber);
 				tm.setFlightNumber(flightNumber);
 
-				tm.setBookingType(Constants.SCHEDULED_BOOKING_TYPE);
-				tm.setActivationStatus(Constants.SCHEDULED_BOOKING_DEACTIVE_STATUS);
+				tm.setBookingType(Integer.parseInt(ConfigDetails.constants.get("SCHEDULED_BOOKING_TYPE")));
+				tm.setActivationStatus(Integer.parseInt(ConfigDetails.constants.get("SCHEDULED_BOOKING_DEACTIVE_STATUS")));
 				
 				
 				String date = null;
@@ -910,7 +926,7 @@ public class Customer {
 							tm.setToLongt((String) toLatLng.get("lat"));
 
 						} catch (Exception e) {
-							addressStatus = Constants.INCORRECT_ADDRESS_CODE;
+							addressStatus = ConfigDetails.constants.get("INCORRECT_ADDRESS_CODE");
 
 							tm.setFromLat("123");
 							tm.setFromLongt("123");
@@ -949,13 +965,13 @@ public class Customer {
 						// tm.getDateTime());
 
 						if (addressStatus
-								.equalsIgnoreCase(Constants.INCORRECT_ADDRESS_CODE)) {
+								.equalsIgnoreCase(ConfigDetails.constants.get("INCORRECT_ADDRESS_CODE"))) {
 							tm.setBookingStatusCode(addressStatus);
-							tm.setBookingStatus(Constants.INCORRECT_ADDRESS_MSG);
+							tm.setBookingStatus(ConfigDetails.constants.get("INCORRECT_ADDRESS_MSG"));
 
 						} else {
-							tm.setBookingStatusCode(Constants.BOOKING_SCHEDULED_CODE);
-							tm.setBookingStatus(Constants.BOOKING_SCHEDULED_MSG);
+							tm.setBookingStatusCode(ConfigDetails.constants.get("BOOKING_SCHEDULED_CODE"));
+							tm.setBookingStatus(ConfigDetails.constants.get("BOOKING_SCHEDULED_MSG"));
 						}
 
 						TravelMaster tmFrmDB = DatabaseManager
@@ -968,16 +984,16 @@ public class Customer {
 
 							if (bookingStatus <= 0) {
 
-								tmFrmDB.setBookingStatusCode(Constants.BOOKING_FAILED_CODE);
-								tmFrmDB.setBookingStatus(Constants.BOOKING_FAILED_MSG);
+								tmFrmDB.setBookingStatusCode(ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
+								tmFrmDB.setBookingStatus(ConfigDetails.constants.get("BOOKING_FAILED_MSG"));
 								DatabaseManager.updateBookingStatus(tmFrmDB);
 
 								responseMap.put("code",
-										Constants.BOOKING_FAILED_CODE);
+										ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 								if (bookingStatus < 0) {
 									responseMap
 											.put("msg",
-													Constants.MIN_BOOKING_TIME_ERROR_MSG);
+													ConfigDetails.constants.get("MIN_BOOKING_TIME_ERROR_MSG"));
 								} else if (bookingStatus == 0) {
 									responseMap.put("msg",
 											"Booking scheduling error.");
@@ -991,7 +1007,7 @@ public class Customer {
 
 								responseMap.put("code", "200");
 								responseMap.put("msg",
-										Constants.BOOKING_SCHEDULED_MSG);
+										ConfigDetails.constants.get("BOOKING_SCHEDULED_MSG"));
 								responseMap.put("travellerPhone", phone);
 								responseMap.put(
 										"bookingId",
@@ -1006,28 +1022,28 @@ public class Customer {
 
 						} else {
 							responseMap.put("code",
-									Constants.BOOKING_FAILED_CODE);
+									ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 							responseMap.put("msg", "Booking creation error.");
 						}
 
 					} else {
-						responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+						responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 						responseMap.put("msg", "Server data booking details.");
 					}
 
 				} else {
 
-					responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+					responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 					responseMap.put("msg", "Incorrect booking details.");
 				}
 
 			} else {
-				responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+				responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 				responseMap.put("msg", "Incorrect booking data.");
 			}
 
 		} catch (Exception e) {
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Incorrect booking data.");
 			e.printStackTrace();
 		}
@@ -1035,9 +1051,9 @@ public class Customer {
 		if (responseMap.size() < 1) {
 
 			log.info("addBookings >> Bookings Error. HTTP bookingStatus code is "
-					+ Constants.BOOKING_FAILED_CODE + ".");
+					+ ConfigDetails.constants.get("BOOKING_FAILED_CODE") + ".");
 
-			responseMap.put("code", Constants.BOOKING_FAILED_CODE);
+			responseMap.put("code", ConfigDetails.constants.get("BOOKING_FAILED_CODE"));
 			responseMap.put("msg", "Server Error.");
 			return Response.status(200).entity(jsonCreater(responseMap))
 					.build();
